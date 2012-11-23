@@ -224,11 +224,17 @@ function UI_main_list($title, $articles, $showgroup = 0){
 	$contents = array();
 	foreach($articles as $article){
 		$line = "<li>";
+        $torrentInfo = '';
 		foreach($article->files as $file){
 			$iconpath = $file->type == "torrent" ? "img/torrent.gif" : "img/subtitle.png";
 			$line .= " <a href=download.php?no=".$file->id." target=_blank><img src=".$iconpath." title='".$file->name."' align=absmiddle></a>";
+            if( $file->type == 'torrent' ){
+                $line .= " <a href=generate_magnet.py?id=".$file->id." target=_blank><img src=img/Magnet-icon.gif align=absmiddle></a>";
+                $torrentInfo = ' <a href=torrent_info.py?id='.$file->id.'>[file info]</a> ';
+            }
 		}
 		$line .=" $article->title";
+        $line .= $torrentInfo;
 		if($showgroup && $article->raw['count'] > 1){
 			$line .= " <a href=group.php?id=".$article->raw['group'].">...more[".$article->raw['count']."]</a>";
 		}
